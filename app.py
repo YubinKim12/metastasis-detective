@@ -18,6 +18,21 @@ st.set_page_config(
     layout="wide",
 )
 
+
+# ----------------------------------------------------------------------
+# Hide Streamlit's default toolbar (Share / star / GitHub / menu) for a cleaner look
+# ----------------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    [data-testid="stToolbar"] {visibility: hidden;}
+    [data-testid="stDecoration"] {display: none;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+ 
+
 # ----------------------------------------------------------------------
 # Load models once and cache them
 # ----------------------------------------------------------------------
