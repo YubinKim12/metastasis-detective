@@ -227,7 +227,8 @@ if page == "Home":
 elif page == "Interactive Diagnosis":
     st.title("Interactive Diagnosis")
     st.write(
-        "The Interactive Diagnosis uses a Decision Tree. "
+        "The Interactive Diagnosis uses a **Decision Tree**. "
+        "You can learn more about Decision Tree on the 'Model Comparison' page."
     )
     st.write(
         "One can see the way the Decision Tree works by adjusting the five genes that it uses. "
@@ -395,9 +396,10 @@ elif page == "Model Comparison":
 
     st.title("Model Comparison")
     st.write(
-        "The same melanoma data was analyzed three different ways. Each algorithm "
-        "reaches its answer differently — and they don't fully agree on which genes "
-        "matter most. Comparing them is part of understanding how the machine learning models work."
+        "In this app, the same melanoma data was analyzed in multiple ways. "
+        "Each model reaches its answer differently; "
+        "thus, there is disagreement over the importance of specific genes and diagnoses. "
+        "Comparing these models is important in noticing the differences. "
     )
 
     st.subheader("Accuracy on held-out test data")
@@ -408,10 +410,9 @@ elif page == "Model Comparison":
     c4.metric("XGBoost", f"{ACC['xgb']*100:.1f}%")
     c5.metric("SVM", f"{ACC['svm']*100:.1f}%")
     st.caption(
-        "Higher isn't automatically 'better' — a simple model that's easy to explain "
-        "can be more useful than a complex one that's slightly more accurate. "
-        "SVM is scored with 5-fold cross-validation (a stricter, leakage-free setup), "
-        "so its number isn't a perfectly like-for-like comparison with the others."
+        "Note: Higher accuracy isn't always the better option. "
+        "Simplicity is also important in explaining models. "
+        "For example, SVM is much harder to explain than Logistic Regression. "
     )
 
     st.divider()
@@ -467,8 +468,9 @@ elif page == "Model Comparison":
             "In this app, the logistic regression model estimates how likely a tumor is metastatic versus primary based on its gene expression."
         )
         st.write(
-            "Logistic regression assigns each gene a **signed weight**. Positive "
-            "(pushes toward *metastatic*), negative (pushes toward *primary*)."
+            "Logistic regression assigns each gene a **signed weight**. "
+            "Positive means the value is more likely to be *metastatic*, "
+            "while negative means the value is more likely to be *primary*. "
         )
         lr_w = logreg.coef_[0]
         order = np.argsort(np.abs(lr_w))[::-1][:15]
@@ -577,12 +579,12 @@ elif page == "Model Comparison":
 
 
 
-    st.subheader("Where they agree — and where they don't")
+    st.subheader("Where the Models Agree vs. Disagree on")
     st.write(
-        "Despite working differently, all five models keep surfacing the same few "
-        "genes — especially **C7** and **S100A7**. When independent methods agree, "
-        "it's a stronger signal that those genes really do carry information about "
-        "whether melanoma has spread."
+        "Despite all of the models working differently, "
+        "all models keep surfacing the same few genes, such as **C7** and **S100A7**. "
+        "When independent methods agree, "
+        "it's a stronger signal that those genes really do carry information about whether melanoma has spread. "
     )
 
     st.markdown("**What these genes are:**")
@@ -608,26 +610,20 @@ elif page == "Model Comparison":
             "flip depending on the tumor type."
         )
     st.caption(
-        "These roles come from cancer research broadly, not proof about melanoma "
-        "specifically — the app shows correlation the model found, not established cause."
+        "While these models show a commonality in the genes between them, it only shows correlation, not causation."
     )
 
-    st.markdown("**But they don't fully agree — look at KRT17:**")
+    
     st.write(
-        "KRT17 is a good example of why comparing models matters. Logistic regression "
-        "ranks it near the top (as a *primary* signal), and random forest rates it "
-        "highly too — but the single decision tree barely leans on it. Why the gap?"
+        "**Not all of these models agree.** "
+        "For example, KRT17 is a good example of why comparing these models matters. "
+        "Logistic regression ranks it near the top as an ‘important gene’, and random forest rates it highly too, however, the single decision tree barely uses it."
     )
-    st.markdown(
-        "- **Different definitions of 'important.'** Each model measures importance its "
-        "own way — a signed weight, a vote count across 500 trees, or how cleanly one "
-        "tree splits the data.\n"
-        "- **The tree is shallow (depth 3).** KRT17 only appears in one low branch, so "
-        "its share looks small — while the forest's 500 trees give it many more chances "
-        "to shine.\n"
-        "- **Genes overlap.** KRT17 behaves like other keratin genes, so a single tree "
-        "can lean on just one of them, while the forest spreads the credit around."
-    )
+
+    st.write("Each model has different definitions of 'importance.' Each model measures importance its own way, such as a signed weight, a vote count across 500 trees, or how cleanly one tree splits the data. The tree is shallow, and because KRT17 only appears in one low branch, its share looks small. On the other hand, the forest's 500 trees give it many more chances to appear.")
+
+    st.write("Comparing these models is important for these types of differences to be shown.")
+
     st.info(
         "Takeaway: A gene isn't simply 'important' or 'not important.' "
         "It really depends on which model you're looking at. "
